@@ -1,0 +1,5 @@
+#!/bin/sh
+mkdir -p /var/lib/gitload/keys
+chmod 777 /var/lib/gitload/keys
+chown root:root /var/lib/gitload/keys
+chmod +x /usr/local/bin/gitload
