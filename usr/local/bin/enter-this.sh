@@ -1,8 +1,9 @@
 #!/usr/bin/expect
 set pass [lindex $argv 0]
 set encrypted [lindex $argv 1]
+set basedir [file dirname $argv0]
 log_user 0
-spawn "/usr/local/bin/gitload-Initialisation.sh" "$encrypted"
+spawn "$basedir/Initialisation.sh" "$encrypted"
 log_user 1
 
 expect {
