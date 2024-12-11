@@ -92,7 +92,6 @@ EOF
       fi
 
       /usr/local/bin/gitload-enter-this.sh `decryptData "$user_keys_dir/$encryptedPass"` "$encryptedFile"
-      HOST=`hostname -s`
       . ~/.keychain/$HOST-sh
       . ~/.keychain/$HOST-sh-gpg
       return 0
@@ -102,5 +101,3 @@ EOF
     fi
   fi
 }
-
-gitload "$@"
