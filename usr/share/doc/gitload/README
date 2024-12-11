@@ -1,0 +1,16 @@
+This is the README file for gitload.
+
+Description:
+This package provides a script that needs to be sourced in the user's shell environment.
+
+Installation:
+1. Install the package using dpkg: sudo dpkg -i mypackage.deb
+2. Source the script in your shell configuration file:
+   echo 'source /etc/profile.d/gitload.sh' >> ~/.bashrc
+   echo 'source /etc/profile.d/gitload.sh' >> ~/.zshrc
+3. Reload your shell configuration:
+   source ~/.bashrc
+   source ~/.zshrc
+
+Usage:
+After installation and sourcing the script, you can use the gitload command in your shell.
