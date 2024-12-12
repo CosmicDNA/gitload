@@ -74,7 +74,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: gitload-package
-          path: ./*.deb
+          path: ../*.deb
 
   release:
     needs: build
@@ -100,7 +100,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: "./*.deb"
+          files: "../*.deb"
           tag_name: "v${{ env.EXTRACTED_VERSION }}"
           name: "Release v${{ env.EXTRACTED_VERSION }}"
           body: "Automatically generated release from GitHub Actions CI/CD pipeline"
