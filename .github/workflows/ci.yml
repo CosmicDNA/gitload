@@ -13,6 +13,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/
+            ~/.config/
+          key: ${{ runner.os }}-cache-${{ hashFiles('**/ci-scripts/update_version.sh') }}
+          restore-keys: |
+            ${{ runner.os }}-cache-
+
       - name: Set up environment
         run: |
           sudo apt-get update
@@ -70,8 +80,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: "./*.deb"
-          tag_name: v${{ env.PACKAGE_VERSION }}
-          name: Release v${{ env.PACKAGE_VERSION }}
+          tag_name: "v${{ env.PACKAGE_VERSION }}"
+          name: "Release v${{ env.PACKAGE_VERSION }}"
           body: "Automatically generated release from GitHub Actions CI/CD pipeline"
           draft: false
           prerelease: false
