@@ -1,0 +1,108 @@
+name: CI/CD Pipeline for Gitload
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/
+            ~/.config/
+          key: ${{ runner.os }}-cache-${{ hashFiles('.github/workflows/ci.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-cache-
+
+      - name: Set up environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+
+      - name: Update version
+        id: update_version
+        run: |
+          # Path to the control file
+          CONTROL_FILE="debian/control"
+
+          # Extract the current version
+          CURRENT_VERSION=$(grep -m1 '^Version:' "$CONTROL_FILE" | awk '{print $2}')
+
+          # Split the version into major, minor, and patch
+          IFS='.' read -r -a VERSION_PARTS <<< "$CURRENT_VERSION"
+
+          # Increment the patch version
+          VERSION_PARTS[2]=$((VERSION_PARTS[2] + 1))
+
+          # Join the version parts back together
+          NEW_VERSION="${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.${VERSION_PARTS[2]}"
+
+          # Update the control file with the new version
+          sed -i "s/^Version: .*/Version: $NEW_VERSION/" "$CONTROL_FILE"
+
+          echo "Updated version: $NEW_VERSION"
+
+
+
+      - name: Commit changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_TOKEN }}
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add debian/control
+          git commit -m "Update version in debian/control"
+          git push origin main
+
+      - name: Build Debian package
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          # debuild -us -uc
+          cd ..
+          dpkg-deb --build gitload
+
+      - name: Upload Debian package as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitload-package
+          path: ./*.deb
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: gitload-package
+
+      - name: Extract version from .deb filename
+        id: extract_version
+        run: |
+          # Path to the control file
+          CONTROL_FILE="debian/control"
+
+          # Extract the current version
+          CURRENT_VERSION=$(grep -m1 '^Version:' "$CONTROL_FILE" | awk '{print $2}')
+          echo "EXTRACTED_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+          echo "Extracted version: $version"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "./*.deb"
+          tag_name: "v${{ env.EXTRACTED_VERSION }}"
+          name: "Release v${{ env.EXTRACTED_VERSION }}"
+          body: "Automatically generated release from GitHub Actions CI/CD pipeline"
+          draft: false
+          prerelease: false
