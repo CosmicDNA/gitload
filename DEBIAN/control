@@ -1,8 +1,0 @@
-Package: gitload
-Version: 1.0
-Section: base
-Priority: optional
-Architecture: all
-Maintainer: Daniel <daniel@cosmicdna.co.uk>
-Description: A brief description of your package
-Depends: expect, openssl, keychain
