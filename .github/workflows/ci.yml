@@ -19,7 +19,7 @@ jobs:
           path: |
             ~/.cache/
             ~/.config/
-          key: ${{ runner.os }}-cache-${{ hashFiles('**/ci-scripts/update_version.sh') }}
+          key: ${{ runner.os }}-cache-${{ hashFiles('.github/workflows/ci.yml') }}
           restore-keys: |
             ${{ runner.os }}-cache-
 
