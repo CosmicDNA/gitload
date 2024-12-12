@@ -5,11 +5,14 @@ RED=31
 
 gitload(){
   # Function to display usage information
+  local app_name=$(basename "$0")
   usage() {
-      echo "Usage: $(basename "$0") [-e data filename] [-d filename] [-h] [encrypted_ssh_password_file encrypted_keychain_args_file]\n\
+      echo "Usage: $app_name [-e data filename] [-d filename] [-r filename] [-i shell] [-h] [encrypted_ssh_password_file encrypted_keychain_args_file]\n\
       encrypted_ssh_password_file encrypted_keychain_args_file \tLoad ssh and gpg key\n\
       -e data filename\t\t\t\t\t\tEncrypt data to filename\n\
       -d filename\t\t\t\t\t\tDecrypt filename\n\
+      -r filename\t\t\t\t\t\tRemove encrypted file\n\
+      -i shell\t\t\t\t\t\t\tInstall source hook to terminal rc file\n\
       -h\t\t\t\t\t\t\tDisplay this help message"
   }
 
@@ -23,7 +26,7 @@ gitload(){
   local SUPPORT=false
 
   # Parse command-line options using getopts
-  while getopts ":e:d:h" opt; do
+  while getopts ":e:d:r:i:h" opt; do
     case ${opt} in
       e)
         ENCRYPT=true
@@ -35,11 +38,59 @@ gitload(){
         DECRYPT=true
         FILENAME=$OPTARG
         ;;
-      h)
+      r)
         SUPPORT=true
-        usage
+        FILENAME=$OPTARG
+        remove_encrypted_file() {
+          if [ -f "$1" ]; then
+              rm "$1"
+              echo "File $1 has been removed."
+          else
+              echo "File $1 does not exist."
+          fi
+        }
+        remove_encrypted_file "$user_keys_dir/$FILENAME"
         ;;
-      *)
+      i)
+        install_source_hook() {
+          local shell=$1
+          local source_line=$2
+          local rc_file=""
+
+          case "$shell" in
+            bash)
+              rc_file="$HOME/.bashrc"
+              ;;
+            zsh)
+              rc_file="$HOME/.zshrc"
+              ;;
+            *)
+              echo "Unsupported shell."
+              return
+              ;;
+          esac
+
+          local comment="# Added by ${app_name}"
+          # Check if the source hook is already present
+          if grep -Fxq "$comment" "$rc_file"; then
+            echo "Source hook already present in $rc_file"
+          else
+            echo -e "\n$comment\n. $source_line" >> "$rc_file"
+            echo "Source hook added to $rc_file"
+          fi
+
+        }
+        SUPPORT=true
+        SHELL=$OPTARG
+        if [ -z "$SHELL" ]; then
+          echo "Error: Shell type is required for installation."
+          usage
+        else
+          echo "Installing source hook..."
+          install_source_hook "$SHELL" /etc/profile.d/gitload.sh
+        fi
+        ;;
+      h | *)
         SUPPORT=true
         usage
         ;;
@@ -66,7 +117,6 @@ $dataToEncrypt
 EOF
       }
 
-
       encryptData "$DATA" "$user_keys_dir/$FILENAME"
     fi
   elif $DECRYPT; then
@@ -75,18 +125,12 @@ EOF
       usage
     else
       echo "Decrypting $FILENAME..."
-      # Call your decryption function here
-
       decryptData "$user_keys_dir/$FILENAME"
     fi
   elif [ $SUPPORT != true ]; then
-    # Default action when no options are provided
-
-    if [ $# -eq 2 ]
-    then
+    if [ $# -eq 2 ]; then
       local encryptedPass=$1
       local encryptedFile=$2
-      # Create user-specific keys directory if it doesn't exist
       if [ ! -d "$user_keys_dir" ]; then
         sudo mkdir -p "$user_keys_dir"
         sudo chmod 700 "$user_keys_dir"

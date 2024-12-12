@@ -29,23 +29,15 @@ dpkg-deb --build gitload
 sudo dpkg -i gitload.deb
 ```
 
-4. Source the Script in Your Shell Configuration File:
+4. Source the Script to Your Shell Configuration File:
 
 ```sh
-# either
-echo 'source /etc/profile.d/gitload.sh' >> ~/.bashrc
-# or
-echo 'source /etc/profile.d/gitload.sh' >> ~/.zshrc
+. /etc/profile.d/gitload.sh
+gitload -i zsh
 ```
 
-5. Reload Your Shell Configuration:
-
-```sh
-# either
-source ~/.bashrc
-# or
-source ~/.zshrc
-```
+> [!TIP]
+> Use bash instead of zsh for bash shell, for example: `gitload -i bash`.
 
 ## Usage
 
@@ -83,6 +75,8 @@ After installation and sourcing the script, you can use the gitload command in y
 - Loading SSH and GPG Keys
 - Encrypting Data to Gitload store
 - Decrypting Data from Gitload store
+- Removing an encrypted file from gitload store
+- Installing source hook to rc file
 - Displaying Help
 
 > [!CAUTION]
@@ -108,6 +102,21 @@ To decrypt a specified filename, use the -d option:
 ```sh
 gitload -d filename
 ```
+
+### Remove an Encrypted File from Gitload Store
+
+```sh
+gitload -r filename
+```
+
+### Installing Source Hook to Shell's rc File
+
+```sh
+gitload -i zsh
+```
+
+> [!TIP]
+> Use bash instead of zsh for bash shell, for example: `gitload -i bash`.
 
 ### Display Help
 To display usage information, use the -h option:
