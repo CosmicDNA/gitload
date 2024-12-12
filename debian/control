@@ -3,7 +3,7 @@ Section: misc
 Priority: optional
 Maintainer: Daniel de Souza <daniel@cosmicdna.co.uk>
 Build-Depends: debhelper (>= 9)
-Standards-Version: 3.9.8
+Standards-Version: 3.9.9
 Homepage: https://github.com/CosmicDNA/gitload
 
 Package: gitload
