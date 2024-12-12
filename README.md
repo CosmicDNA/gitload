@@ -52,7 +52,7 @@ gitload -e your_ssh_password ssh_password_file
 3. **Create the Encrypted Keychain Arguments**: Use the gitload -e command to create the encrypted keychain arguments. The keychain_args_file should be a string containing both the SSH file path and the GPG key. For example:
 
 ```sh
-gitload -e "~/.ssh/id_john_doe 3F4A1B2C5D6E7F8G"
+gitload -e "~/.ssh/id_john_doe 3F4A1B2C5D6E7F8G" keychain_args_file
 ```
 
 4. **Use the Encrypted Files**: Finally, use the encrypted files with the gitload command:
