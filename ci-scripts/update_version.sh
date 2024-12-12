@@ -8,5 +8,5 @@ IFS='.' read -r major minor patch <<< "$current_version"
 new_version="$major.$minor.$((patch + 1))"
 
 # Update the control file with the new version
-sed -i "s/Version: $current_version/Version: $new_version/" debian/control
+sed -i "s/^Version: $current_version/Version: $new_version/" debian/control
 echo "Updated version: $new_version"
