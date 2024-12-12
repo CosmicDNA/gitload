@@ -46,7 +46,45 @@ source ~/.zshrc
 ```
 
 ## Usage
-After installation and sourcing the script, you can use the gitload command in your shell. Here are some common use cases:
+
+1. **Set the `PASSKEY` Environment Variable**: Ensure you have a PASSKEY environment variable set for the encryption and decryption processes.
+
+2. **Create the Encrypted SSH Password File**. For example:
+
+```sh
+gitload -e your_ssh_password ssh_password_file
+```
+
+3. **Create the Encrypted Keychain Arguments**: Use the gitload -e command to create the encrypted keychain arguments. The keychain_args_file should be a string containing both the SSH file path and the GPG key. For example:
+
+```sh
+gitload -e "~/.ssh/id_john_doe 3F4A1B2C5D6E7F8G"
+```
+
+4. **Use the Encrypted Files**: Finally, use the encrypted files with the gitload command:
+
+```sh
+gitload ssh_password_file keychain_args_file
+```
+
+5. **Execute git commands with GPG signing and SSH support**:
+
+```sh
+git commit -m ":tada:"
+```
+
+Now you can commit utilising your ssh but also signing with your loaded gpg key in a breeze.
+
+## Switches
+After installation and sourcing the script, you can use the gitload command in your shell. The command can be used for:
+
+- Loading SSH and GPG Keys
+- Encrypting Data to Gitload store
+- Decrypting Data from Gitload store
+- Displaying Help
+
+> [!CAUTION]
+> For the former 3 cases make sure the `PASSKEY` environment variable is properly set before running gitload command. This variable is crucial because it is used to encrypt / decrypt information back and forth from gitload store.
 
 ### Load SSH and GPG Keys
 To load SSH and GPG keys from encrypted files, use the following command:
@@ -55,18 +93,12 @@ To load SSH and GPG keys from encrypted files, use the following command:
 gitload ssh_password_file keychain_args_file
 ```
 
-
-
-Now you can commit utilising your ssh but also signing with your loaded gpg key in a breeze.
-
 ### Encrypt Data
 To encrypt data to a specified filename, use the -e option:
 
 ```sh
 gitload -e "data to encrypt" filename
 ```
-
-> **Important:** Make sure to set the `PASSKEY` environment variable before running the encryption.
 
 ### Decrypt Data
 To decrypt a specified filename, use the -d option:
@@ -75,34 +107,11 @@ To decrypt a specified filename, use the -d option:
 gitload -d filename
 ```
 
-> **Important:** Make sure to set the `PASSKEY` environment variable before running the decryption. It should match the PASSKEY used in the encryption.
-
 ### Display Help
 To display usage information, use the -h option:
 
 ```sh
 gitload -h
-```
-
-## Recommendations
-1. Set the PASSKEY Environment Variable: Ensure you have a PASSKEY environment variable set for the encryption and decryption processes.
-
-2. Create the Encrypted SSH Password File. For example:
-
-```sh
-gitload -e your_ssh_password ssh_password_file
-```
-
-3. Create the Encrypted Keychain Arguments: Use the gitload -e command to create the encrypted keychain arguments. The keychain_args_file should be a string containing both the SSH file path and the GPG key. For example:
-
-```sh
-gitload -e "~/.ssh/id_john_doe 3F4A1B2C5D6E7F8G"
-```
-
-4. Use the Encrypted Files: Finally, use the encrypted files with the gitload command:
-
-```sh
-gitload ssh_password_file keychain_args_file
 ```
 
 ## How It Works
