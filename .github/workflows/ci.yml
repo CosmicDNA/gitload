@@ -16,7 +16,7 @@ jobs:
       - name: Set up environment
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential devscripts lintian fakeroot
+          sudo apt-get install -y build-essential devscripts lintian fakeroot debhelper
 
       - name: Update version
         run: |
@@ -49,11 +49,11 @@ jobs:
 
   release:
     needs: build
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: gitload-package
 
