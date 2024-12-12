@@ -6,8 +6,8 @@ RED=31
 gitload(){
   # Function to display usage information
   usage() {
-      echo "Usage: $(basename "$0") [-e data filename] [-d filename] [-h] [encryptedfileA encryptedfileB]\n\
-      encryptedfileA encryptedfileB \tLoad ssh and gpg key\n\
+      echo "Usage: $(basename "$0") [-e data filename] [-d filename] [-h] [encrypted_ssh_password_file encrypted_keychain_args_file]\n\
+      encrypted_ssh_password_file encrypted_keychain_args_file \tLoad ssh and gpg key\n\
       -e data filename\t\t\tEncrypt data to filename\n\
       -d filename\t\t\tDecrypt filename\n\
       -h\t\t\t\tDisplay this help message"
