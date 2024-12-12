@@ -33,13 +33,8 @@ jobs:
         run: |
           output=$(bash ci-scripts/update_version.sh)
           version=$(echo "$output" | grep -oP 'New version: \K[^\s]+')
-          echo "$output"
-          echo "version for release: $version"
-          echo "PACKAGE_VERSION=$version" >> $GITHUB_ENV
-
-      - name: Debug environment variables
-        run: |
-          echo "PACKAGE_VERSION=${{ env.PACKAGE_VERSION }}"
+          # echo "$output"
+          # echo "version for release: $version"
 
       - name: Commit changes
         env:
@@ -76,12 +71,22 @@ jobs:
         with:
           name: gitload-package
 
+      - name: Extract version from .deb filename
+        id: extract_version
+        run: |
+          deb_file=$(ls ./*.deb | head -n 1)
+          echo "DEB_FILE=$deb_file" >> $GITHUB_ENV
+          version=$(echo "$deb_file" | grep -oP '_(\d+\.\d+\.\d+)_')
+          version=${version//_/}
+          echo "EXTRACTED_VERSION=$version" >> $GITHUB_ENV
+          echo "Extracted version: $version"
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: "./*.deb"
-          tag_name: "v${{ env.PACKAGE_VERSION }}"
-          name: "Release v${{ env.PACKAGE_VERSION }}"
+          tag_name: "v${{ env.EXTRACTED_VERSION }}"
+          name: "Release v${{ env.EXTRACTED_VERSION }}"
           body: "Automatically generated release from GitHub Actions CI/CD pipeline"
           draft: false
           prerelease: false
