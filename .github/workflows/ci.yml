@@ -1,0 +1,68 @@
+name: CI/CD Pipeline for Gitload
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: debian-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up environment
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential devscripts lintian fakeroot
+
+      - name: Update version
+        run: |
+          bash ci-scripts/update_version.sh
+
+      - name: Commit changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_TOKEN }}
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add debian/control
+          git commit -m "Update version in debian/control"
+          git push origin main
+
+      - name: Build Debian package
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          debuild -us -uc
+
+      - name: Check package with lintian
+        run: |
+          lintian ../*.changes
+
+      - name: Upload Debian package as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: gitload-package
+          path: ../*.deb
+
+  release:
+    needs: build
+    runs-on: debian-latest
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: gitload-package
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "../*.deb"
+          tag_name: v${{ github.run_number }}
+          name: Release v${{ github.run_number }}
+          body: "Automatically generated release from GitHub Actions CI/CD pipeline"
+          draft: false
+          prerelease: false
