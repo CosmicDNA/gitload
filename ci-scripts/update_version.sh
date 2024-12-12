@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Fetch the current version from the control file
-current_version=$(grep -Po '(?<=Version: ).*' debian/control)
+current_version=$(grep -Po '^Version: \K.*' debian/control)
 
 # Increment the version number
 IFS='.' read -r major minor patch <<< "$current_version"
