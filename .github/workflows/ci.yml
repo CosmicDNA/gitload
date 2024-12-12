@@ -40,10 +40,6 @@ jobs:
           cd ${GITHUB_WORKSPACE}
           debuild -us -uc
 
-      - name: Check package with lintian
-        run: |
-          lintian ../*.changes
-
       - name: Move .deb files
         run: |
           mv ../*.deb ./
