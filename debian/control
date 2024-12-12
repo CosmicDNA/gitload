@@ -8,7 +8,7 @@ Homepage: https://github.com/CosmicDNA/gitload
 
 Package: gitload
 Architecture: any
-Depends: expect, openssl, keychain, ${shlibs:Depends}, ${misc:Depends}
+Depends: expect, openssl, keychain, ${misc:Depends}
 Description: Tool to manage GPG and SSH keys with keychain
  gitload is a script designed to help manage and load GPG and SSH keys
  efficiently using keychain. This tool automates the process of key
