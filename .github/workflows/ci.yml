@@ -32,7 +32,7 @@ jobs:
         id: update_version
         run: |
           # Path to the control file
-          CONTROL_FILE="debian/control"
+          CONTROL_FILE="DEBIAN/control"
 
           # Extract the current version
           CURRENT_VERSION=$(grep -m1 '^Version:' "$CONTROL_FILE" | awk '{print $2}')
@@ -90,7 +90,7 @@ jobs:
         id: extract_version
         run: |
           # Path to the control file
-          CONTROL_FILE="debian/control"
+          CONTROL_FILE="DEBIAN/control"
 
           # Extract the current version
           CURRENT_VERSION=$(grep -m1 '^Version:' "$CONTROL_FILE" | awk '{print $2}')
