@@ -1,14 +1,16 @@
 Source: gitload
-Version: 1.0.0
 Section: misc
 Priority: optional
 Maintainer: Daniel de Souza <daniel@cosmicdna.co.uk>
-Build-Depends: debhelper (>= 9), expect, openssl, keychain
+Build-Depends: debhelper (>= 12), expect, openssl, keychain
 Standards-Version: 4.1.0
 Homepage: https://github.com/CosmicDNA/gitload
 
 Package: gitload
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: A tool to manage GPG and SSH keys with keychain
- gitload is a script designed to help manage and load GPG and SSH keys efficiently using keychain. This tool automates the process of key management, making it easier to handle secure connections and authentications in your git workflow.
+Description: Tool to manage GPG and SSH keys with keychain
+ gitload is a script designed to help manage and load GPG and SSH keys
+ efficiently using keychain. This tool automates the process of key
+ management, making it easier to handle secure connections and
+ authentications in your git workflow.

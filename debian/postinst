@@ -1,5 +1,12 @@
 #!/bin/sh
+set -e
 mkdir -p /var/lib/gitload/keys
 chmod 777 /var/lib/gitload/keys
 chown root:root /var/lib/gitload/keys
-echo "\nInstallation complete.\nMake sure to run:\n. /usr/local/gitload/gitload.sh\ngitload -i [bash | zsh]"
+
+# Custom post-install commands
+echo "Installation complete. Make sure to run:"
+echo ". /usr/local/gitload/gitload.sh"
+echo "gitload -i [bash | zsh]"
+
+#DEBHELPER#
