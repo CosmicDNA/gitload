@@ -23,6 +23,7 @@ jobs:
         run: |
           output=$(bash ci-scripts/update_version.sh)
           version=$(echo "$output" | grep -oP 'New version: \K[^\s]+')
+          echo "$output"
           echo "PACKAGE_VERSION=$version" >> $GITHUB_ENV
 
       - name: Commit changes
