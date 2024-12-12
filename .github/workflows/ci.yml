@@ -41,11 +41,15 @@ jobs:
         run: |
           lintian ../*.changes
 
+      - name: Move .deb files
+        run: |
+          mv ../*.deb ./
+
       - name: Upload Debian package as artifact
         uses: actions/upload-artifact@v4
         with:
           name: gitload-package
-          path: ../*.deb
+          path: ./*.deb
 
   release:
     needs: build
@@ -60,7 +64,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: "../*.deb"
+          files: "./*.deb"
           tag_name: v${{ github.run_number }}
           name: Release v${{ github.run_number }}
           body: "Automatically generated release from GitHub Actions CI/CD pipeline"
