@@ -21,7 +21,8 @@ jobs:
       - name: Update version
         id: update_version
         run: |
-          version=$(bash ci-scripts/update_version.sh)
+          output=$(bash ci-scripts/update_version.sh)
+          version=$(echo "$output" | grep -oP 'New version: \K[^\s]+')
           echo "PACKAGE_VERSION=$version" >> $GITHUB_ENV
 
       - name: Commit changes
@@ -68,7 +69,7 @@ jobs:
         with:
           files: "./*.deb"
           tag_name: v${{ env.PACKAGE_VERSION }}
-          name: Release v${{ env.PACKAGE_VERSION
+          name: Release v${{ env.PACKAGE_VERSION }}
           body: "Automatically generated release from GitHub Actions CI/CD pipeline"
           draft: false
           prerelease: false
