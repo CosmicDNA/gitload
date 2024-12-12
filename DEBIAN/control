@@ -1,8 +1,12 @@
 Package: gitload
-Version: 1.0.4
+Version: 1.0.3
 Section: base
 Priority: optional
 Architecture: all
 Maintainer: Daniel <daniel@cosmicdna.co.uk>
-Description: A brief description of your package
+Description: Tool to manage GPG and SSH keys with keychain
+ gitload is a script designed to help manage and load GPG and SSH keys
+ efficiently using keychain. This tool automates the process of key
+ management, making it easier to handle secure connections and
+ authentications in your git workflow.
 Depends: expect, openssl, keychain
