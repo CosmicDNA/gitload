@@ -65,8 +65,13 @@ jobs:
       - name: Build Debian package
         run: |
           cd ${GITHUB_WORKSPACE}
+          cd ..
           dpkg-deb --build gitload
-          mv ../gitload.deb ./gitload_${{ env.NEW_VERSION }}.deb
+          mv gitload.deb gitload_${{ env.NEW_VERSION }}.deb
+
+      - name: Move .deb files
+        run: |
+          mv ../*.deb ./
 
       - name: Upload Debian package as artifact
         uses: actions/upload-artifact@v4
