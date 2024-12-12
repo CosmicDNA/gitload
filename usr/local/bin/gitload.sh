@@ -8,10 +8,9 @@ gitload(){
   usage() {
       echo "Usage: $(basename "$0") [-e data filename] [-d filename] [-h] [encrypted_ssh_password_file encrypted_keychain_args_file]\n\
       encrypted_ssh_password_file encrypted_keychain_args_file \tLoad ssh and gpg key\n\
-      -e data filename\t\t\tEncrypt data to filename\n\
-      -d filename\t\t\tDecrypt filename\n\
-      -h\t\t\t\tDisplay this help message"
-      exit 1
+      -e data filename\t\t\t\t\t\tEncrypt data to filename\n\
+      -d filename\t\t\t\t\t\tDecrypt filename\n\
+      -h\t\t\t\t\t\t\tDisplay this help message"
   }
 
   local user_keys_dir="/var/lib/gitload/keys/$USER"
@@ -21,9 +20,10 @@ gitload(){
   local FILENAME=""
   local ENCRYPT=false
   local DECRYPT=false
+  local SUPPORT=false
 
   # Parse command-line options using getopts
-  while getopts ":e:d" opt; do
+  while getopts ":e:d:h" opt; do
     case ${opt} in
       e)
         ENCRYPT=true
@@ -33,12 +33,14 @@ gitload(){
         ;;
       d)
         DECRYPT=true
-        FILENAME=$2
+        FILENAME=$OPTARG
         ;;
       h)
+        SUPPORT=true
         usage
         ;;
       *)
+        SUPPORT=true
         usage
         ;;
     esac
@@ -77,7 +79,7 @@ EOF
 
       decryptData "$user_keys_dir/$FILENAME"
     fi
-  else
+  elif [ $SUPPORT != true ]; then
     # Default action when no options are provided
 
     if [ $# -eq 2 ]

@@ -32,7 +32,9 @@ sudo dpkg -i gitload.deb
 4. Source the Script in Your Shell Configuration File:
 
 ```sh
+# either
 echo 'source /etc/profile.d/gitload.sh' >> ~/.bashrc
+# or
 echo 'source /etc/profile.d/gitload.sh' >> ~/.zshrc
 ```
 
