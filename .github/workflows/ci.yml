@@ -13,34 +13,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Cache APT packages
+      - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: |
-            /tmp/apt-packages
             ~/.cache/
             ~/.config/
-          key: ${{ runner.os }}-apt-cache-${{ hashFiles('.github/workflows/ci.yml') }}
+          key: ${{ runner.os }}-cache-${{ hashFiles('.github/workflows/ci.yml') }}
           restore-keys: |
-            ${{ runner.os }}-apt-cache-
-
-      - name: Prepare APT package cache
-        run: |
-          mkdir -p /tmp/apt-packages
-          sudo apt-get update
-          sudo apt-get install -y expect keychain debhelper
-          sudo apt-get clean
-          tar -cvf /tmp/apt-packages/apt-packages.tar /var/cache/apt/archives
-
-      - name: Restore APT packages
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          mkdir -p /var/cache/apt/archives
-          if [ -f /tmp/apt-packages/apt-packages.tar ]; then
-            sudo tar -xvf /tmp/apt-packages/apt-packages.tar -C /
-          fi
-          sudo apt-get update
-          sudo apt-get install -y expect keychain debhelper
+            ${{ runner.os }}-cache-
 
       - name: Set up environment
         run: |
