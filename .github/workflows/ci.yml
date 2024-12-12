@@ -19,8 +19,10 @@ jobs:
           sudo apt-get install -y build-essential devscripts lintian fakeroot debhelper
 
       - name: Update version
+        id: update_version
         run: |
-          bash ci-scripts/update_version.sh
+          version=$(bash ci-scripts/update_version.sh)
+          echo "PACKAGE_VERSION=$version" >> $GITHUB_ENV
 
       - name: Commit changes
         env:
@@ -65,8 +67,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: "./*.deb"
-          tag_name: v${{ github.run_number }}
-          name: Release v${{ github.run_number }}
+          tag_name: v${{ env.PACKAGE_VERSION }}
+          name: Release v${{ env.PACKAGE_VERSION
           body: "Automatically generated release from GitHub Actions CI/CD pipeline"
           draft: false
           prerelease: false
