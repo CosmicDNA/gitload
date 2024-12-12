@@ -27,6 +27,10 @@ jobs:
           echo "version for release: $version"
           echo "PACKAGE_VERSION=$version" >> $GITHUB_ENV
 
+      - name: Debug environment variables
+        run: |
+          echo "PACKAGE_VERSION=${{ env.PACKAGE_VERSION }}"
+
       - name: Commit changes
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_TOKEN }}
