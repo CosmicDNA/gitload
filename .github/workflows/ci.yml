@@ -24,6 +24,7 @@ jobs:
           output=$(bash ci-scripts/update_version.sh)
           version=$(echo "$output" | grep -oP 'New version: \K[^\s]+')
           echo "$output"
+          echo "version for release: $version"
           echo "PACKAGE_VERSION=$version" >> $GITHUB_ENV
 
       - name: Commit changes
