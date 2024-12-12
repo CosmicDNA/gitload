@@ -3,7 +3,7 @@
 # Main script
 getparams() {
   local ENCRYPTED_IDENTITY=$1
-  . /usr/local/bin/gitload-decryptData.sh
+  . /usr/local/gitload/gitload-decryptData.sh
   echo "$(decryptData "/var/lib/gitload/keys/$USER/$ENCRYPTED_IDENTITY")"
 }
 

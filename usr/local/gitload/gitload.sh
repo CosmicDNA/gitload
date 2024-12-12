@@ -1,3 +1,11 @@
+
+
+
+
+
+
+
+
 #!/bin/sh
 BOLD=1
 BLINKING=5
@@ -87,7 +95,7 @@ gitload(){
           usage
         else
           echo "Installing source hook..."
-          install_source_hook "$SHELL" /etc/profile.d/gitload.sh
+          install_source_hook "$SHELL" /usr/local/gitload/gitload.sh
         fi
         ;;
       h | *)
@@ -97,7 +105,7 @@ gitload(){
     esac
   done
 
-  . /usr/local/bin/gitload-decryptData.sh
+  . /usr/local/gitload/gitload-decryptData.sh
   # Perform actions based on the options provided
   if $ENCRYPT; then
     if [ -z "$DATA" ] || [ -z "$FILENAME" ]; then
@@ -137,7 +145,7 @@ EOF
         sudo chown "$USER:$USER" "$user_keys_dir"
       fi
 
-      /usr/local/bin/gitload-enter-this.sh `decryptData "$user_keys_dir/$encryptedPass"` "$encryptedFile"
+      /usr/local/gitload/gitload-enter-this.sh `decryptData "$user_keys_dir/$encryptedPass"` "$encryptedFile"
       . ~/.keychain/$HOST-sh
       . ~/.keychain/$HOST-sh-gpg
       return 0

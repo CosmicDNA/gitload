@@ -2,7 +2,7 @@
 set pass [lindex $argv 0]
 set encrypted [lindex $argv 1]
 log_user 0
-spawn "/usr/local/bin/gitload-Initialisation.sh" "$encrypted"
+spawn "/usr/local/gitload/gitload-Initialisation.sh" "$encrypted"
 log_user 1
 
 expect {

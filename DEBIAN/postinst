@@ -2,3 +2,4 @@
 mkdir -p /var/lib/gitload/keys
 chmod 777 /var/lib/gitload/keys
 chown root:root /var/lib/gitload/keys
+echo "\nInstallation complete.\nMake sure to run:\n. /usr/local/gitload/gitload.sh\ngitload -i [bash | zsh]"
